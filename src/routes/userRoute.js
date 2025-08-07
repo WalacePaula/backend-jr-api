@@ -1,8 +1,12 @@
 import {Router} from 'express';
 import models from '../models/index.js';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import authMiddleware from '../middleware/authMiddleware.js';
 
 const userRouter = Router();
+
+userRouter.use(authMiddleware);
 
 userRouter.get('/users', async (req, res) => {
     try{
@@ -53,6 +57,13 @@ userRouter.post('/login', async (req, res) => {
             return res.status(401).send('Senha inválida');
         }
 
+        const token = jwt.sign({ id: user.id, username: user.username },
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' }
+        );
+
+        res.json({ token });
+
         return res.send('Login realizado com sucesso');
     } catch (error) {
         console.error('Erro ao realizar login:', error);
@@ -60,11 +71,12 @@ userRouter.post('/login', async (req, res) => {
     }
 });
 
-
+//Talvez não precise
 userRouter.delete('/user/:userId', (req, res) => {
   res.send('Excluir usuários');
 })
 
+//Talvez não precise
 userRouter.put('/user/:userId', (req, res) => {
   const { userId } = req.params;
   res.send('Atualizar usuário ' + userId);
