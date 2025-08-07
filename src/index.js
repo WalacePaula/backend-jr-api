@@ -9,8 +9,8 @@ const app = express();
 
 app.use(express.json());
 
-app.use('api/users', userRouter);
-app.use('api/posts', postRouter);
+app.use('/api/users', userRouter);
+app.use('/api/posts', postRouter);
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });

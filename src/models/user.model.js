@@ -5,7 +5,7 @@ const userModel = (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true
     },
-    nome: {
+    name: {
         type: DataTypes.STRING,
         allowNull: false
     },
@@ -29,7 +29,7 @@ const userModel = (sequelize, DataTypes) => {
 
     User.associate = (models) => {
         User.hasMany(models.Post, {
-            foreignKey: 'userId', as : 'posts'
+            foreignKey: 'autorId', as : 'posts'
         });
 
         // Associações com comentários

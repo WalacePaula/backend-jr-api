@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 export const createNewUser = async (userData) => {
-    const { nome, username, password } = userData;
+    const { name, username, password } = userData;
 
     const existingUser = await models.User.findOne({ where: { username } });
     if (existingUser) {
@@ -13,10 +13,10 @@ export const createNewUser = async (userData) => {
     }
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await models.User.create({ nome, username, password: hashedPassword });
+    const user = await models.User.create({ name, username, password: hashedPassword });
     return {
         id: user.id,
-        nome: user.nome,
+        name: user.name,
         username: user.username,
         createdAt: user.createdAt,
     };
