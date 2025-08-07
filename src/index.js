@@ -9,10 +9,12 @@ const app = express();
 
 app.use(express.json());
 
-app.use(userRouter);
-app.use(postRouter);
-app.listen(PORT);
+app.use('api/users', userRouter);
+app.use('api/posts', postRouter);
+app.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
+});
 
-models.sequelize.sync({}).then(() => {
+models.sequelize.sync().then(() => {
   console.log( 'Conectado com o banco de dados');
 })

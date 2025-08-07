@@ -1,4 +1,4 @@
-const user = (sequelize, DataTypes) => {
+const userModel = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
     id: {
         type: DataTypes.INTEGER,
@@ -28,8 +28,8 @@ const user = (sequelize, DataTypes) => {
 })
 
     User.associate = (models) => {
-        User.hasMany(models.Postagem, {
-            foreignKey: 'userId', as : 'postagens'
+        User.hasMany(models.Post, {
+            foreignKey: 'userId', as : 'posts'
         });
 
         // Associações com comentários
@@ -37,4 +37,4 @@ const user = (sequelize, DataTypes) => {
     return User;
 };
 
-export default user;
+export default userModel;

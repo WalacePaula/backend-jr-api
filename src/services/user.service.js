@@ -2,7 +2,9 @@ import models from '../models/index.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
-export const createNewUser = async (nome, username, password) => {
+export const createNewUser = async (userData) => {
+    const { nome, username, password } = userData;
+
     const existingUser = await models.User.findOne({ where: { username } });
     if (existingUser) {
         const error = new Error('Este nome de usuário já está em uso.');
@@ -20,7 +22,8 @@ export const createNewUser = async (nome, username, password) => {
     };
 };
 
-export const loginUser = async (username, password) => {
+export const loginUser = async (credenciais) => {
+    const { username, password } = credenciais;
     const user = await models.User.findOne({ where: { username } });
     if (!user) {
         const error = new Error('Credenciais inválidas');

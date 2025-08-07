@@ -1,5 +1,5 @@
-const postagem = (sequelize, DataTypes) => {
-  const Postagem = sequelize.define('Postagem', {
+const postModel = (sequelize, DataTypes) => {
+  const Post = sequelize.define('Post', {
     id: { 
         type: DataTypes.INTEGER,    
         primaryKey: true,
@@ -22,19 +22,19 @@ const postagem = (sequelize, DataTypes) => {
         }
     }
     }, {
-    tableName: 'postagens'
+    tableName: 'posts'
     });
 
-    Postagem.associate = (models) => {
-        Postagem.belongsTo(models.User, {
+    Post.associate = (models) => {
+        Post.belongsTo(models.User, {
             foreignKey: 'autorId',
             as: 'autor'
         });
         //Associação com comentários
     };
 
-    return Postagem;
+    return Post;
 
 };
 
-export default postagem;
+export default postModel;
