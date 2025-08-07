@@ -5,11 +5,12 @@ const user = (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true
     },
-    name: {
+    nome: {
         type: DataTypes.STRING,
         allowNull: false
     },
-    email: {
+
+    username: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true
@@ -25,6 +26,14 @@ const user = (sequelize, DataTypes) => {
     }}, {
     tableName: 'users'
 })
+
+    User.associate = (models) => {
+        User.hasMany(models.Postagem, {
+            foreignKey: 'userId', as : 'postagens'
+        });
+
+        // Associações com comentários
+    }
     return User;
 };
 

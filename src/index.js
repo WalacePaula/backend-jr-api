@@ -6,6 +6,8 @@ import models from './models/index.js';
 
 const app = express();
 
+app.use(express.json()); // Middleware para parsear JSON
+
 app.use(userRouter);
 app.listen(PORT);
 
