@@ -44,26 +44,38 @@ export const updateExistingPost = async (updateData) => {
 export const findAllPosts = async () => {
     const posts = await models.Post.findAll({
         include: [
-        { 
-            model: models.User,
-            as: 'autor',
-            attributes: ['id', 'name', 'username']
-        }, 
         {
             model: models.Comment,
             as: 'comments',
-            attributes: ['id', 'content', 'createdAt'],
-            include: [
-                {
-                    model: models.User,
-                    as: 'autor',
-                    attributes: ['id', 'name', 'username']
-                }
-            ]
+            attributes: ['id', 'content', 'createdAt', 'authorId'],
         }
     ]
     });
-    return posts;
+
+    const authorIds = new Set();
+    posts.forEach(post => {
+        authorIds.add(post.authorId.toString());
+        post.comments.forEach(comment => {
+            authorIds.add(comment.authorId.toString());
+        });
+    });
+
+    const authors = await User.find({ '_id': { $in: Array.from(authorIds)} }).select('name username');
+    const authorMap = new Map(authors.map(author => [author._id.toString(), author]));
+
+    const populatedPosts = posts.map(post => {
+        const postJson = post.toJSON();
+        postJson.author = authorMap.get(post.authorId.toString());
+        postJson.comments = postJson.comments.map(comment => {
+            return {
+                ...comment,
+                autor: authorMap.get(comment.authorId.toString())
+            };
+        });
+    
+        return postJson;
+    });
+    return populatedPosts;
 };
 
 export const deletePostById = async (postData) => {

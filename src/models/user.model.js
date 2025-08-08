@@ -1,43 +1,25 @@
-const userModel = (sequelize, DataTypes) => {
-  const User = sequelize.define('User', {
-    id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-    },
-    name: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
+import mongoose from "mongoose";
 
+const userSchema = new mongoose.Schema ({
+    name: {
+        type: String,
+        required: true
+    },
     username: {
-        type: DataTypes.STRING,
-        allowNull: false,
+        type: String,
+        required: true,
         unique: true
     },
     password: {
-        type: DataTypes.STRING,
-        allowNull: false
+        type: String,
+        required: true
     },
     createdAt: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        defaultValue: DataTypes.NOW
-    }}, {
-    tableName: 'users'
-})
-
-    User.associate = (models) => {
-        User.hasMany(models.Post, {
-            foreignKey: 'authorId',
-            as : 'posts'
-        });
-        User.hasMany(models.Comment, {
-            foreignKey: 'authorId',
-            as : 'comments'
-        });
+        type: Date,
+        default: Date.now
     }
-    return User;
-};
+});
 
-export default userModel;
+const User = mongoose.model("User", userSchema);
+
+export default User;

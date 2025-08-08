@@ -26,10 +26,6 @@ const postModel = (sequelize, DataTypes) => {
     });
 
     Post.associate = (models) => {
-        Post.belongsTo(models.User, {
-            foreignKey: 'authorId',
-            as: 'autor'
-        });
         Post.hasMany(models.Comment, {
             foreignKey: 'postId',
             as: 'comments'

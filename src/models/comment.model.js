@@ -35,10 +35,6 @@ const commentModel = (sequelize, DataTypes) => {
       foreignKey: 'postId',
       as: 'post'
     });
-    Comment.belongsTo(models.User, {
-      foreignKey: 'authorId',
-      as: 'autor'
-    });
   };
     return Comment;
 };
