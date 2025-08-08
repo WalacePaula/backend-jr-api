@@ -52,7 +52,7 @@ export const deletePost = async (req, res) => {
     const postData = { postId, authorId };
     try {
         await deletePostById(postData);
-        res.status(204).json({ message: 'Post deletado com sucesso' });
+        res.status(200).json({ message: 'Post deletado com sucesso' });
     } catch (error) {
         console.error("Erro ao deletar post:", error);
         res.status(error.statusCode || 500).json({ error: error.message });
