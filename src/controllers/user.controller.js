@@ -1,4 +1,3 @@
-import user from '../models/user.model.js';
 import { createNewUser, loginUser } from '../services/user.service.js';
 
 export const createUser = async (req, res) => {
@@ -21,7 +20,7 @@ export const login = async (req, res) => {
   const { username, password } = req.body;
 
   if (!username || !password) {
-    return res.status(400).json('Todos os campos são obrigatórios');
+    return res.status(400).json({error: 'Todos os campos são obrigatórios'});
   }
 
   const userData = { username, password };

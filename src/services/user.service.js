@@ -43,4 +43,4 @@ export const loginUser = async (credenciais) => {
     );
 
     return token;
-}
+};

@@ -1,19 +1,19 @@
 import models from '../models/index.js';
 
 export const createNewPost = async (postData)  => {
-    const { titulo, conteudo, autorId } = postData;
-    if (!titulo || !conteudo) {
+    const { title, content, authorId } = postData;
+    if (!title || !content) {
         const error = new Error('Título ou conteúdo vazios');
         error.statusCode = 409;
         throw error;
     }
 
-    const post = await models.Post.create({ titulo, conteudo, autorId });
+    const post = await models.Post.create({ title, content, authorId });
     return post;
 };
 
 export const updateExistingPost = async (updateData) => {
-    const { postId, titulo, conteudo, autorId } = updateData;
+    const { postId, title, content, authorId } = updateData;
 
     const post = await models.Post.findByPk(postId);
     if (!post) {
@@ -22,18 +22,18 @@ export const updateExistingPost = async (updateData) => {
         throw error;
     }
 
-    if (post.autorId !== autorId) {
+    if (post.authorId !== authorId) {
         const error = new Error('Você não tem permissão para atualizar este post');
         error.statusCode = 403;
         throw error;
     }
 
-    if (titulo) {
-        post.titulo = titulo;
+    if (title) {
+        post.title = title;
     }
 
-    if (conteudo) {
-        post.conteudo = conteudo;
+    if (content) {
+        post.content = content;
     }
 
     await post.save();
@@ -43,26 +43,41 @@ export const updateExistingPost = async (updateData) => {
 
 export const findAllPosts = async () => {
     const posts = await models.Post.findAll({
-        include: [{ 
+        include: [
+        { 
             model: models.User,
             as: 'autor',
-            attributes: ['id', 'name', 'username']}]
+            attributes: ['id', 'name', 'username']
+        }, 
+        {
+            model: models.Comment,
+            as: 'comments',
+            attributes: ['id', 'content', 'createdAt'],
+            include: [
+                {
+                    model: models.User,
+                    as: 'autor',
+                    attributes: ['id', 'name', 'username']
+                }
+            ]
+        }
+    ]
     });
     return posts;
 };
 
 export const deletePostById = async (postData) => {
-    const { postId, autorId } = postData;
+    const { postId, authorId } = postData;
     const post = await models.Post.findByPk(postId);
     if (!post) {
         const error = new Error('Post não encontrado');
         error.statusCode = 404;
         throw error;
     }
-    if (post.autorId !== autorId) {
+    if (post.authorId !== authorId) {
         const error = new Error('Você não tem permissão para deletar este post');
         error.statusCode = 403;
         throw error;
     }
     await post.destroy();
-}
+};

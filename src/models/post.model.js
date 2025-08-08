@@ -5,15 +5,15 @@ const postModel = (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true
     }, 
-    titulo: {
+    title: {
         type: DataTypes.STRING,
         allowNull: false
     },
-    conteudo: {
+    content: {
         type: DataTypes.TEXT,
         allowNull: false
     },
-    autorId: {
+    authorId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
@@ -27,14 +27,16 @@ const postModel = (sequelize, DataTypes) => {
 
     Post.associate = (models) => {
         Post.belongsTo(models.User, {
-            foreignKey: 'autorId',
+            foreignKey: 'authorId',
             as: 'autor'
         });
-        //Associação com comentários
+        Post.hasMany(models.Comment, {
+            foreignKey: 'postId',
+            as: 'comments'
+        });
     };
 
     return Post;
-
 };
 
 export default postModel;
